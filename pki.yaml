@@ -1,0 +1,62 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: etcd-ca
+spec:
+  isCA: true
+  commonName: etcd-ca
+  secretName: etcd-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned-issuer
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: etcd-issuer
+spec:
+  ca:
+    secretName: etcd-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: etcd-peer
+spec:
+  secretName: etcd-peer
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages: [server auth, client auth]
+  dnsNames: ["*.etcd.etcd.svc.cluster.local"]
+  issuerRef:
+    name: etcd-issuer
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: etcd-server
+spec:
+  secretName: etcd-server
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages: [server auth, client auth]
+  dnsNames: ["etcd.etcd.svc.cluster.local"]
+  issuerRef:
+    name: etcd-issuer
+    kind: Issuer
+    group: cert-manager.io
