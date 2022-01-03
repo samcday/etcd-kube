@@ -3,5 +3,13 @@ kind: Kustomization
 namespace: etcd
 resources:
 - etcd.yaml
+- monitoring.yaml
 - namespace.yaml
 - pki.yaml
+configMapGenerator:
+- name: grafana-dashboard
+  files:
+  - grafana-dashboard.json
+  options:
+    labels:
+      grafana_dashboard: "1"

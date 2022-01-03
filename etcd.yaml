@@ -84,10 +84,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: etcd
+  labels:
+    app: etcd
 spec:
   ports:
   - name: client
     port: 2379
     targetPort: client
+  - name: metrics
+    port: 2381
+    targetPort: metrics
   selector:
     app: etcd
