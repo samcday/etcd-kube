@@ -55,7 +55,7 @@ spec:
     algorithm: ECDSA
     size: 256
   usages: [server auth, client auth]
-  dnsNames: ["etcd.etcd.svc.cluster.local"]
+  dnsNames: ["etcd.etcd.svc.cluster.local", "*.etcd.etcd.svc.cluster.local"]
   issuerRef:
     name: etcd-issuer
     kind: Issuer
